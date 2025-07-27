@@ -59,9 +59,8 @@ def Bank_NEWS(news_date):
                         }
                         if data not in table:  # 加這行就能避免重複
                             table.append(data)
-
-        current_date += timedelta(days=1)  # 換下一天
         print(current_date)
+        current_date += timedelta(days=1)  # 換下一天
         time.sleep(4)
         
     
