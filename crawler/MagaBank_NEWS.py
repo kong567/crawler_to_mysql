@@ -61,6 +61,7 @@ def Bank_NEWS(news_date):
                             table.append(data)
 
         current_date += timedelta(days=1)  # 換下一天
+        print(current_date)
         time.sleep(4)
         
     
