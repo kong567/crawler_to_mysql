@@ -310,7 +310,7 @@ def PTT_news(start_index):
             data = crawl_page(url)
             all_data.extend(data)
             print(f"✅ 爬到第 {i} 頁，共 {len(data)} 筆")
-            time.sleep(1 + random.uniform(0, 1.5))
+            time.sleep(3 + random.uniform(0, 1.5))
         except Exception as e:
             print(f"⚠️ Error at {url}: {e}")
             continue

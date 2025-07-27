@@ -10,6 +10,8 @@ import logging
 from crawler.worker import app
 from crawler.mysqlcreate import upload_data_to_mysql_MagaBank_NEWS
 import sys
+import time
+
 
 @app.task()
 
@@ -59,6 +61,8 @@ def Bank_NEWS(news_date):
                             table.append(data)
 
         current_date += timedelta(days=1)  # 換下一天
+        time.sleep(4)
+        
     
     df = pd.DataFrame(table)
     
