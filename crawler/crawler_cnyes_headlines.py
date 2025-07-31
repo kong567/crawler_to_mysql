@@ -12,7 +12,7 @@ import sys
 from crawler.worker import app  # Celery app 引入
 
 # Celery 任務註冊
-@app.task()
+
 def cnyes_headlines(month: str = "2025-07"):
     # 日期處理
     try:

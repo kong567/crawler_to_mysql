@@ -18,7 +18,7 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(message)s"
 )
 
-@app.task()
+
 
 def historyprice(ticker) :
     print(f"ETF_historyprice.py 啟動，收到的 ticker 是：{sys.argv[1]}")

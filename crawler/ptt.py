@@ -193,26 +193,12 @@ from crawler.worker import app
 from crawler.mysqlcreate import upload_data_to_mysql_ptt
 import sys
 
-# === Retry 裝飾器 ===
-def retry(times=3, delay=3):
-    def wrapper(fn):
-        @functools.wraps(fn)
-        def inner(*args, **kwargs):
-            for i in range(times):
-                try:
-                    return fn(*args, **kwargs)
-                except Exception as e:
-                    print(f"[retry] 第 {i+1}/{times} 次失敗: {e}")
-                    time.sleep(delay)
-            raise RuntimeError(f"[retry] 已重試 {times} 次仍失敗")
-        return inner
-    return wrapper
 
-@app.task()
+
 def PTT_news(start_index):
     start_index = int(start_index)
 
-    @retry()
+   
     def get_full_date(post_url):
         headers = {
             'User-Agent': 'Mozilla/5.0',
@@ -231,7 +217,7 @@ def PTT_news(start_index):
             return date_obj.strftime("%Y/%m/%d")
         return "Unknown"
 
-    @retry()
+  
     def crawl_page(url):
         headers = {
             'User-Agent': 'Mozilla/5.0',
@@ -268,52 +254,21 @@ def PTT_news(start_index):
 
         return data_list
 
-    @retry()
-    def get_latest_index(board):
-        url = f"https://www.ptt.cc/bbs/{board}/index.html"
-        headers = {
-            'User-Agent': 'Mozilla/5.0',
-            'Accept-Language': 'zh-TW,zh;q=0.9',
-            'Referer': 'https://www.google.com/',
-            'Connection': 'keep-alive'
-        }
-        cookies = {'over18': '1'}
-
-        res = requests.get(url, headers=headers, cookies=cookies, timeout=10)
-        soup = BeautifulSoup(res.text, 'html.parser')
-        a = soup.find_all("a", {"class": "btn wide"})
-
-        if len(a) > 1:
-            href = a[1]["href"]
-        elif len(a) == 1:
-            href = a[0]["href"]
-        else:
-            raise ValueError("❌ 無法取得分頁連結")
-
-        split_href = href.split("/")
-        if not split_href or "index" not in split_href[-1]:
-            raise ValueError("❌ 無法解析 index")
-
-        latest_index = split_href[-1].replace("index", "").replace(".html", "")
-        return int(latest_index) + 1
-
-    board = "stock"
-    end_index = get_latest_index(board)
-
+   
     base_url = "https://www.ptt.cc/bbs/Stock/index{}.html"
     all_data = []
 
-    for i in range(start_index, end_index + 1):
-        url = base_url.format(i)
-        print(f"Crawling: {url}")
-        try:
-            data = crawl_page(url)
-            all_data.extend(data)
-            print(f"✅ 爬到第 {i} 頁，共 {len(data)} 筆")
-            time.sleep(3 + random.uniform(0, 1.5))
-        except Exception as e:
-            print(f"⚠️ Error at {url}: {e}")
-            continue
+    
+    url = base_url.format(start_index)
+    print(f"Crawling: {url}")
+    try:
+        data = crawl_page(url)
+        all_data.extend(data)
+        print(f"✅ 爬到第 {start_index} 頁，共 {len(data)} 筆")
+        time.sleep(3 + random.uniform(0, 1.5))
+    except Exception as e:
+        print(f"⚠️ Error at {url}: {e}")
+       
 
     df = pd.DataFrame(all_data).rename(columns={"標題": "Title", "人氣": "Popularity", "日期": "Date"})
     df["Date"] = pd.to_datetime(df["Date"], errors='coerce')
@@ -323,6 +278,6 @@ def PTT_news(start_index):
     print("✅ 輸入 MySQL 完成")
 
 if __name__ == "__main__":
-    start_index = sys.argv[1] if len(sys.argv) > 1 else "9000"
+    start_index = sys.argv[1] 
     print(f"✅ 進入 main，ptt: {start_index}", flush=True)
     PTT_news(start_index)

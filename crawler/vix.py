@@ -7,7 +7,7 @@ from crawler.worker import app
 from crawler.mysqlcreate import upload_data_to_mysql_vix
 import sys
 
-@app.task()
+
 
 
 def vix_data(Volatility_Index):

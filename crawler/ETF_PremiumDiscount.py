@@ -5,7 +5,6 @@ from crawler.worker import app
 from crawler.mysqlcreate import upload_data_to_mysql_ETF_PremiumDiscount
 import sys
 
-@app.task() 
 
 def  PremiumDiscount(etf_list):
 # 抓取每一個ETF的折溢價
