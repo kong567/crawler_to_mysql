@@ -1,0 +1,10 @@
+Metadata-Version: 2.1
+Name: crawler
+Version: 0.0.1
+Summary: test
+Author: group4
+Author-email: group4@gmail.com
+Classifier: Development Status :: 3 - Alpha
+Description-Content-Type: text/markdown
+
+# crawler_to_mysql

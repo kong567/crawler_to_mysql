@@ -9,7 +9,7 @@ celery = "==5.5.0"
 crawler = {editable = true, path = "."}
 pandas = "*"
 requests = "*"
-yfinance = "*"
+yfinance = "==0.2.61"
 jieba = "*"
 bs4 = "*"
 tabulate = "*"
@@ -20,6 +20,10 @@ pymysql = "*"
 python-dotenv = "*"
 uvicorn = "*"
 api = "*"
+matplotlib = "*"
+numpy = "*"
+plotly = "*"
+multitasking = "==0.0.9"
 
 [dev-packages]
 
