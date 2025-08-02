@@ -167,6 +167,7 @@ def analyze(STOCK_ID) :
         elif score <= -0.7: return "紅燈"
         else: return pd.NA
 
+    print("資料分析中")
     result["燈號"] = result["總分"].apply(classify_signal)
 
     # --- 抑制連續紅燈/綠燈疲乏機制 ---
@@ -197,14 +198,18 @@ def analyze(STOCK_ID) :
                 max_score = max(總分_series[i - 3:i])
                 if pd.notna(總分_series[i]) and 總分_series[i] <= max_score:
                     燈號_series[i] = "黃燈"
-
+    
     # 更新結果回 DataFrame
     result["燈號"] = 燈號_series
     print("🧪 result 欄位：", list(result.columns))
+    print("輸出表格")
+    print(result)
+    print("輸出完成")
 
     # --- 匯出結果 ---
+    print("輸入進mysql")
     ETF_signal_result(result ,STOCK_ID)
-
+    print("mysql完成")
     # # --- 動態互動圖 ---
     # plot_df = result[(result["燈號"].notna()) & (result["燈號"] != "黃燈")].dropna(subset=["市價"])
     # plot_df["市價"] = pd.to_numeric(plot_df["市價"], errors="coerce")

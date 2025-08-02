@@ -22,15 +22,19 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(message)s"
 )
 def historyprice(ticker) :
-    end_date = pd.Timestamp.today().strftime('%Y-%m-%d')
+    today = pd.Timestamp.today().strftime('%Y-%m-%d')
+    end_date = today
+    start_date = today
+    # end_date = "2025-08-01"
+    # start_date = "2025-08-01"
     url = "https://api.finmindtrade.com/api/v4/data"
     token = "" # 參考登入，獲取金鑰
     headers = {"Authorization": f"Bearer {token}"}
     parameter = {
         "dataset": "TaiwanStockPrice",
         "data_id": ticker,
-        "start_date": "2020-04-02",
-        "end_date": str(end_date),
+        "start_date": start_date,
+        "end_date": end_date,
     }
     resp = requests.get(url, headers=headers, params=parameter)
     data = resp.json()
@@ -47,8 +51,7 @@ def historyprice(ticker) :
     data["Stock_id"] = ticker
     data = data[["Date", "Stock_id", "Close", "Adj_Close", "Volume"]]
     data = data.rename(columns={"date": "Date"})
-    print(data.head())
-    logger.info(data.tail())
+    print(data)
     print(f"✅ 寫入前資料筆數：{len(data)}")
     logging.info("已完成爬蟲，準備寫入資料庫")
     time.sleep(10)
