@@ -36,11 +36,16 @@ def historyprice(ticker) :
     data = resp.json()
     data = pd.DataFrame(data["data"])
     print(data.head())
-    
-    data = data.rename(columns={"close": "Close", "volume": "Volume"})
+
+    data = data.rename(columns={
+    "close": "Close",
+    "Trading_Volume": "Volume",
+    "stock_id": "Stock_id",
+    "date": "Date"
+    })
     data["Adj_Close"] = data["Close"]  # 補上缺失欄位
     data["Stock_id"] = ticker
-    data = data[["date", "Stock_id", "Close", "Adj_Close", "Volume"]]
+    data = data[["Date", "Stock_id", "Close", "Adj_Close", "Volume"]]
     data = data.rename(columns={"date": "Date"})
     print(data.head())
     logger.info(data.tail())

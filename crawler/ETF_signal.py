@@ -76,16 +76,17 @@ def analyze(STOCK_ID) :
             scores.append(score)
 
         df["折溢價分數"] = scores
+        print(df)
         return df
 
     # --- 讀取資料 ---
     query =f"SELECT * FROM ETF_PremiumDiscount WHERE Stock_id = '{STOCK_ID}' "
     df_PremiumDiscount = pd.read_sql(query, engine)
-
+    
     df_PremiumDiscount["交易日期"] = pd.to_datetime(df_PremiumDiscount["Date"])
     df_PremiumDiscount.set_index("交易日期", inplace=True)
     df_PremiumDiscount = score_PremiumDiscount_z_dynamic(df_PremiumDiscount)
-
+  
     # --- 讀取其他資料 ---
     df_sentiment = sentiment_analysis(address)
 
